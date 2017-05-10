@@ -5,10 +5,20 @@ apply plugin: 'application'
 //mainClassName = 'unionFind.UnionFindWithSpecificCanonicalElement'
 mainClassName = 'unionFind.SuccessorWithDelete'
 
+apply plugin: 'findbugs'
+//apply plugin: 'checkstyle'
+
+repositories {
+    mavenCentral()
+}
 //jar {
 //    baseName = 'unionFind'
 //    version = '0.1.0'
 //}
+
+checkstyle {
+     toolVersion = '7.4'
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.5'

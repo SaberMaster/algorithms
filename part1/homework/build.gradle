@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+apply plugin: 'application'
+mainClassName = 'Percolation'
+
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+
+repositories {
+    mavenCentral()
+}
+//jar {
+//    baseName = 'unionFind'
+//    version = '0.1.0'
+//}
+
+checkstyle {
+     toolVersion = '7.4'
+     configFile rootProject.file('config/checkstyle/checkstyle.xml')
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
