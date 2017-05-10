@@ -1,7 +1,9 @@
 apply plugin: 'java'
 
 apply plugin: 'application'
-mainClassName = 'Percolation'
+//mainClassName = 'Percolation'
+mainClassName = 'PercolationVisualizer'
+//mainClassName = 'InteractivePercolationVisualizer'
 
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
@@ -18,10 +20,29 @@ checkstyle {
      toolVersion = '7.4'
      configFile rootProject.file('config/checkstyle/checkstyle.xml')
 }
+
+findbugs {
+     toolVersion = '3.0.1'
+     includeFilter = rootProject.file('config/findbugs/findbugs.xml')
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
 }

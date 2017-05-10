@@ -35,8 +35,8 @@ public class Percolation {
             || col > num;
     }
 
-    private boolean isOutBoundsAndOpen(int row, int col) {
-        return isOutBounds(row, col)
+    private boolean isInBoundsAndOpen(int row, int col) {
+        return !isOutBounds(row, col)
             && isOpen(row, col);
     }
 
@@ -49,19 +49,19 @@ public class Percolation {
         int indexRight = index + 1;
 
         // union up
-        if (isOutBoundsAndOpen(row - 1, col)) {
+        if (isInBoundsAndOpen(row - 1, col)) {
             uf.union(index, indexUp);
         }
         // union down
-        if (isOutBoundsAndOpen(row + 1, col)) {
+        if (isInBoundsAndOpen(row + 1, col)) {
             uf.union(index, indexDown);
         }
         // union left
-        if (isOutBoundsAndOpen(row, col - 1)) {
+        if (isInBoundsAndOpen(row, col - 1)) {
             uf.union(index, indexLeft);
         }
         // union right
-        if (isOutBoundsAndOpen(row, col + 1)) {
+        if (isInBoundsAndOpen(row, col + 1)) {
             uf.union(index, indexRight);
         }
     }
@@ -75,6 +75,35 @@ public class Percolation {
             uf.union(index, virtualBottomNode);
         }
     }
+
+    private void unionVirtualTopNode(int row, int col) {
+        int index = getIndex(row, col);
+        if (1 == row) {
+            uf.union(index, virtualTopNode);
+        }
+    }
+
+    // private void unionVirtualBottomNode() {
+    //     for (int i = 1; i <= num; i++) {
+    //         int index = getIndex(num, i);
+    //         if (isOpen(num, i)) {
+    //             uf.union(index, virtualBottomNode);
+    //         }
+    //     }
+    // }
+
+    private boolean checkIsPercolates() {
+        for (int i = 1; i <= num; i++) {
+            int index = getIndex(num, i);
+            if (isOpen(num, i)) {
+                if (uf.connected(index, virtualTopNode)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // open site (row, col) if it is not open already
     public void open(int row, int col) {
         if (isOpen(row, col)) return;
@@ -82,7 +111,8 @@ public class Percolation {
         // union around
         unionAround(row, col);
         // union virtual node
-        unionVirtualNode(row, col);
+        // unionVirtualNode(row, col);
+        unionVirtualTopNode(row, col);
         isOpen[getIndex(row, col)] = true;
     }
 
@@ -105,7 +135,8 @@ public class Percolation {
     }
     // does the system percolate?
     public boolean percolates() {
-        return uf.connected(virtualTopNode, virtualBottomNode);
+        // return uf.connected(virtualTopNode, virtualBottomNode);
+        return checkIsPercolates();
     }
     // test client (optional)
     public static void main(String[] args) {
