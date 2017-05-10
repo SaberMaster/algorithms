@@ -1,0 +1,15 @@
+apply plugin: 'java'
+
+apply plugin: 'application'
+//mainClassName = 'unionFind.SocialNetworkConnectivity'
+//mainClassName = 'unionFind.UnionFindWithSpecificCanonicalElement'
+mainClassName = 'unionFind.SuccessorWithDelete'
+
+//jar {
+//    baseName = 'unionFind'
+//    version = '0.1.0'
+//}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}

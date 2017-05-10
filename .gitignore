@@ -1,2 +1,5 @@
+.gradle/
+.meghanada/
+build/
+gradlew*
 .DS_Store
-
