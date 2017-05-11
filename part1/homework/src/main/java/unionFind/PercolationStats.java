@@ -4,8 +4,6 @@ import edu.princeton.cs.algs4.Stopwatch;
 
 
 public class PercolationStats {
-    private double[] results;
-    private int[] ids;
     private double myMean;
     private double myStd;
     private double myLo;
@@ -16,22 +14,16 @@ public class PercolationStats {
         if (n <= 0 || trials <= 0) {
             throw new java.lang.IllegalArgumentException();
         }
-        initAll(n, trials);
         // init numbers
         executeTrials(n, trials);
     }
 
-    private void initAll(int size, int trials) {
+    private double executeOneTrail(int size) {
         int sizeSquare = size * size;
-        results = new double[trials];
-        ids = new int[sizeSquare];
+        int[] ids = new int[sizeSquare];
         for (int i = 0; i < sizeSquare; i++) {
             ids[i] = i + 1;
         }
-    }
-
-    private double executeOneTrail(int size) {
-        int sizeSquare = size * size;
         // init array
         Percolation p = new Percolation(size);
         StdRandom.shuffle(ids);
@@ -49,10 +41,11 @@ public class PercolationStats {
 
 
     private void executeTrials(int size, int trials) {
+        double[] results = new double[trials];
         for (int i = 0; i < trials; i++) {
             results[i] = executeOneTrail(size);
         }
-        calc(trials);
+        calc(trials, results);
     }
 
 
@@ -74,7 +67,7 @@ public class PercolationStats {
         }
     }
 
-    private void calc(int trials) {
+    private void calc(int trials, double[] results) {
         myMean = StdStats.mean(results);
         myStd = StdStats.stddev(results);
         double delta = (1.96 * myStd / Math.sqrt(trials));

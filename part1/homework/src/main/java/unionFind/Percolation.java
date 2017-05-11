@@ -3,14 +3,13 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF ufWithBtmVirtualNode;
     // private QuickFindUF uf;
     private boolean[] isOpen;
     private int num;
     private int virtualTopNode;
     private int virtualBottomNode;
     private int openSiteNum;
-    // private boolean isPercolates;
-    private boolean isUnionAllVirtualMode;
 
     // create n-by-n grid, with all sites blocked
     public Percolation(int n) {
@@ -19,6 +18,7 @@ public class Percolation {
         }
         isOpen = new boolean[n * n];
         uf = new WeightedQuickUnionUF(n * n + 2);
+        ufWithBtmVirtualNode = new WeightedQuickUnionUF(n * n + 2);
         // uf = new QuickFindUF(n * n + 2);
 
         num = n;
@@ -30,8 +30,7 @@ public class Percolation {
         for (int i = 0; i < n * n; i++) {
             isOpen[i] = false;
         }
-        isUnionAllVirtualMode = false;
-        unionTopAndBottomVirtualNode(isUnionAllVirtualMode);
+        unionTopVirtualNode();
     }
 
 
@@ -62,77 +61,42 @@ public class Percolation {
         // union up
         if (isInBoundsAndOpen(row - 1, col)) {
             uf.union(index, indexUp);
+            ufWithBtmVirtualNode.union(index, indexUp);
         }
         // union down
         if (isInBoundsAndOpen(row + 1, col)) {
             uf.union(index, indexDown);
+            ufWithBtmVirtualNode.union(index, indexDown);
         }
         // union left
         if (isInBoundsAndOpen(row, col - 1)) {
             uf.union(index, indexLeft);
+            ufWithBtmVirtualNode.union(index, indexLeft);
         }
         // union right
         if (isInBoundsAndOpen(row, col + 1)) {
             uf.union(index, indexRight);
+            ufWithBtmVirtualNode.union(index, indexRight);
         }
     }
-
-    // private void unionVirtualNode(int row, int col) {
-    //     int index = getIndex(row, col);
-    //     if (1 == row) {
-    //         uf.union(index, virtualTopNode);
-    //     }
-    //     else if (num == row) {
-    //         uf.union(index, virtualBottomNode);
-    //     }
-    // }
-
-    // private void unionVirtualTopNode(int row, int col) {
-    //     int index = getIndex(row, col);
-    //     if (1 == row) {
-    //         uf.union(index, virtualTopNode);
-    //     }
-    // }
-
-    // private void unionVirtualBottomNode() {
-    //     for (int i = 1; i <= num; i++) {
-    //         int index = getIndex(num, i);
-    //         if (isOpen(num, i)) {
-    //             uf.union(index, virtualBottomNode);
-    //         }
-    //     }
-    // }
 
     /**
      * init virtual node at beginning may be the best method
      * but if percolation all open bottom node is full
      *
      */
-    private void unionTopAndBottomVirtualNode(boolean isAll) {
+    private void unionTopVirtualNode() {
         for (int i = 1; i <= num; i++) {
             uf.union(getIndex(1, i), virtualTopNode);
-            if (isAll) {
-                uf.union(getIndex(num, i), virtualBottomNode);
-            }
+            ufWithBtmVirtualNode.union(getIndex(1, i), virtualTopNode);
         }
     }
 
-    /**
-     * checkPercolaates on call percolates func
-     * travel all bottom open site
-     *
-     * @return
-     */
-    private boolean checkIsPercolates() {
-        for (int i = 1; i <= num; i++) {
-            int index = getIndex(num, i);
-            if (isOpen(num, i)) {
-                if (uf.connected(index, virtualTopNode)) {
-                    return true;
-                }
-            }
+    private void unionBtmVirtualNode(int row, int col) {
+        int index = getIndex(row, col);
+        if (num == row) {
+            ufWithBtmVirtualNode.union(index, virtualBottomNode);
         }
-        return false;
     }
 
     private int getRowFromIndex(int index) {
@@ -153,19 +117,6 @@ public class Percolation {
         }
     }
 
-    // /**
-    //  * check is Percolates on Open new site
-    //  * using find_max() fun but not implement this
-    //  * @param row
-    //  * @param col
-    //  */
-    // private void updateIsPercolatesAfterOpen(int row, int col) {
-    //     int index = getIndex(row, col);
-    //     int max = uf.find_max(index);
-    //     if (max <= num * (num - 1)) return;
-    //     isPercolates = isFull(getRowFromIndex(max), getColFromIndex(max));
-    // }
-
     // open site (row, col) if it is not open already
     public void open(int row, int col) {
         if (isOpen(row, col)) return;
@@ -173,10 +124,8 @@ public class Percolation {
         // union around
         unionAround(row, col);
         // union virtual node
-        // unionVirtualNode(row, col);
-        // unionVirtualTopNode(row, col);
+        unionBtmVirtualNode(row, col);
         isOpen[getIndex(row, col) - 1] = true;
-        // updateIsPercolatesAfterOpen(row, col);
     }
 
 
@@ -199,13 +148,7 @@ public class Percolation {
     }
     // does the system percolate?
     public boolean percolates() {
-        if (isUnionAllVirtualMode) {
-            return uf.connected(virtualTopNode, virtualBottomNode);
-        }
-        else {
-            return checkIsPercolates();
-        }
-        // return isPercolates;
+        return ufWithBtmVirtualNode.connected(virtualTopNode, virtualBottomNode);
     }
     // test client (optional)
     public static void main(String[] args) {
