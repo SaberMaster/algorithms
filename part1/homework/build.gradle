@@ -24,7 +24,8 @@ checkstyle {
 
 findbugs {
      toolVersion = '3.0.1'
-     includeFilter = rootProject.file('config/findbugs/findbugs.xml')
+     reportLevel = 'low'
+     excludeFilter  rootProject.file('config/findbugs/findbugs.xml')
 }
 
 dependencies {

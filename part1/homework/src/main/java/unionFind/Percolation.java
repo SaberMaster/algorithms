@@ -1,6 +1,5 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import edu.princeton.cs.algs4.QuickFindUF;
 
 public class Percolation {
     private WeightedQuickUnionUF uf;
@@ -10,7 +9,7 @@ public class Percolation {
     private int virtualTopNode;
     private int virtualBottomNode;
     private int openSiteNum;
-    private boolean isPercolates;
+    // private boolean isPercolates;
     private boolean isUnionAllVirtualMode;
 
     // create n-by-n grid, with all sites blocked
@@ -26,12 +25,12 @@ public class Percolation {
         virtualTopNode = 0;
         virtualBottomNode = n * n + 1;
         openSiteNum = 0;
-        isPercolates = false;
+        // isPercolates = false;
 
         for (int i = 0; i < n * n; i++) {
             isOpen[i] = false;
         }
-        isUnionAllVirtualMode = true;
+        isUnionAllVirtualMode = false;
         unionTopAndBottomVirtualNode(isUnionAllVirtualMode);
     }
 
@@ -78,31 +77,31 @@ public class Percolation {
         }
     }
 
-    private void unionVirtualNode(int row, int col) {
-        int index = getIndex(row, col);
-        if (1 == row) {
-            uf.union(index, virtualTopNode);
-        }
-        else if (num == row) {
-            uf.union(index, virtualBottomNode);
-        }
-    }
+    // private void unionVirtualNode(int row, int col) {
+    //     int index = getIndex(row, col);
+    //     if (1 == row) {
+    //         uf.union(index, virtualTopNode);
+    //     }
+    //     else if (num == row) {
+    //         uf.union(index, virtualBottomNode);
+    //     }
+    // }
 
-    private void unionVirtualTopNode(int row, int col) {
-        int index = getIndex(row, col);
-        if (1 == row) {
-            uf.union(index, virtualTopNode);
-        }
-    }
+    // private void unionVirtualTopNode(int row, int col) {
+    //     int index = getIndex(row, col);
+    //     if (1 == row) {
+    //         uf.union(index, virtualTopNode);
+    //     }
+    // }
 
-    private void unionVirtualBottomNode() {
-        for (int i = 1; i <= num; i++) {
-            int index = getIndex(num, i);
-            if (isOpen(num, i)) {
-                uf.union(index, virtualBottomNode);
-            }
-        }
-    }
+    // private void unionVirtualBottomNode() {
+    //     for (int i = 1; i <= num; i++) {
+    //         int index = getIndex(num, i);
+    //         if (isOpen(num, i)) {
+    //             uf.union(index, virtualBottomNode);
+    //         }
+    //     }
+    // }
 
     /**
      * init virtual node at beginning may be the best method
@@ -136,7 +135,7 @@ public class Percolation {
         return false;
     }
 
-    public int getRowFromIndex(int index) {
+    private int getRowFromIndex(int index) {
         if (0 == index % num) {
             return index / num;
         }
@@ -145,7 +144,7 @@ public class Percolation {
         }
     }
 
-    public int getColFromIndex(int index) {
+    private int getColFromIndex(int index) {
         if (0 == index % num) {
             return num;
         }

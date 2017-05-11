@@ -37,7 +37,7 @@ public class PercolationStats {
         StdRandom.shuffle(ids);
         for (int i = 0; i < sizeSquare; i++) {
             if (p.percolates()) break;
-            p.open(p.getRowFromIndex(ids[i]), p.getColFromIndex(ids[i]));
+            p.open(getRowFromIndex(ids[i], size), getColFromIndex(ids[i], size));
         }
         // System.out.printf("size = %d, sites = %d, opens = %d, threshold = %.2f%n",
         //                   size,
@@ -53,6 +53,25 @@ public class PercolationStats {
             results[i] = executeOneTrail(size);
         }
         calc(trials);
+    }
+
+
+    private int getRowFromIndex(int index, int num) {
+        if (0 == index % num) {
+            return index / num;
+        }
+        else {
+            return index / num + 1;
+        }
+    }
+
+    private int getColFromIndex(int index, int num) {
+        if (0 == index % num) {
+            return num;
+        }
+        else {
+            return index % num;
+        }
     }
 
     private void calc(int trials) {
