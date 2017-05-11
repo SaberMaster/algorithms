@@ -1,8 +1,10 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+import edu.princeton.cs.algs4.QuickFindUF;
 
 public class Percolation {
     private WeightedQuickUnionUF uf;
+    // private QuickFindUF uf;
     private boolean[] isOpen;
     private int num;
     private int virtualTopNode;
@@ -18,6 +20,7 @@ public class Percolation {
         }
         isOpen = new boolean[n * n];
         uf = new WeightedQuickUnionUF(n * n + 2);
+        // uf = new QuickFindUF(n * n + 2);
 
         num = n;
         virtualTopNode = 0;
@@ -28,9 +31,10 @@ public class Percolation {
         for (int i = 0; i < n * n; i++) {
             isOpen[i] = false;
         }
-        isUnionAllVirtualMode = false;
+        isUnionAllVirtualMode = true;
         unionTopAndBottomVirtualNode(isUnionAllVirtualMode);
     }
+
 
     private int getIndex(int row, int col) {
         return (row - 1) * num + col;
@@ -132,7 +136,7 @@ public class Percolation {
         return false;
     }
 
-    private int getRowFromIndex(int index) {
+    public int getRowFromIndex(int index) {
         if (0 == index % num) {
             return index / num;
         }
@@ -141,7 +145,7 @@ public class Percolation {
         }
     }
 
-    private int getColFromIndex(int index) {
+    public int getColFromIndex(int index) {
         if (0 == index % num) {
             return num;
         }
@@ -206,11 +210,23 @@ public class Percolation {
     }
     // test client (optional)
     public static void main(String[] args) {
-        long seed = 10;
-        StdRandom.setSeed(seed);
-        for (int i = 0; i < 10; i++) {
-            int x = StdRandom.uniform(10);
-            System.out.println(x);
+        int size = 20;
+        int sizeSquare = size * size;
+        // init array
+        int[] ids = new int[sizeSquare];
+        Percolation p = new Percolation(size);
+        for (int i = 0; i < sizeSquare; i++) {
+            ids[i] = i + 1;
         }
+        StdRandom.shuffle(ids);
+        for (int i = 0; i < sizeSquare; i++) {
+            if (p.percolates()) break;
+            p.open(p.getRowFromIndex(ids[i]), p.getColFromIndex(ids[i]));
+        }
+        System.out.printf("size = %d, sites = %d, opens = %d, threshold = %.2f%n",
+                          size,
+                          sizeSquare,
+                          p.numberOfOpenSites(),
+                          (float) p.numberOfOpenSites() / sizeSquare);
     }
 }
