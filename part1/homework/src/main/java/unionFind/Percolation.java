@@ -8,24 +8,29 @@ public class Percolation {
     private int virtualTopNode;
     private int virtualBottomNode;
     private int openSiteNum;
+    private boolean isPercolates;
+
     // create n-by-n grid, with all sites blocked
     public Percolation(int n) {
         if (n <= 0) {
             throw new java.lang.IllegalArgumentException();
         }
         isOpen = new boolean[n * n];
-        num = n;
         uf = new WeightedQuickUnionUF(n * n + 2);
-        virtualTopNode = n * n;
+
+        num = n;
+        virtualTopNode = 0;
         virtualBottomNode = n * n + 1;
         openSiteNum = 0;
+        isPercolates = false;
+
         for (int i = 0; i < n * n; i++) {
             isOpen[i] = false;
         }
     }
 
     private int getIndex(int row, int col) {
-        return (row - 1) * num + (col - 1);
+        return (row - 1) * num + col;
     }
 
     private boolean isOutBounds(int row, int col) {
@@ -92,6 +97,13 @@ public class Percolation {
     //     }
     // }
 
+
+    /**
+     * checkPercolaates on call percolates func
+     * travel all bottom open site
+     *
+     * @return
+     */
     private boolean checkIsPercolates() {
         for (int i = 1; i <= num; i++) {
             int index = getIndex(num, i);
@@ -104,6 +116,19 @@ public class Percolation {
         return false;
     }
 
+    /**
+     * check is Percolates on Open new site
+     * using find() fun
+     * @param row
+     * @param col
+     */
+    private void updateIsPercolatesAfterOpen(int row, int col) {
+        int index = getIndex(row, col);
+        int max = uf.find(index);
+        if (max <= num * (num - 1)) return;
+        isPercolates = isFull(max / num + 1, max % num);
+    }
+
     // open site (row, col) if it is not open already
     public void open(int row, int col) {
         if (isOpen(row, col)) return;
@@ -113,16 +138,18 @@ public class Percolation {
         // union virtual node
         // unionVirtualNode(row, col);
         unionVirtualTopNode(row, col);
-        isOpen[getIndex(row, col)] = true;
+        isOpen[getIndex(row, col) - 1] = true;
+        updateIsPercolatesAfterOpen(row, col);
     }
 
 
     // is site (row, col) open?
     public boolean isOpen(int row, int col) {
         if (isOutBounds(row, col)) {
+            // System.out.printf("row = %d, col = %d, index = %d\n", row, col, getIndex(row, col));
             throw new java.lang.IndexOutOfBoundsException();
         }
-        return isOpen[getIndex(row, col)];
+        return isOpen[getIndex(row, col) - 1];
     }
     // is site (row, col) full?
     public boolean isFull(int row, int col) {
@@ -136,7 +163,8 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates() {
         // return uf.connected(virtualTopNode, virtualBottomNode);
-        return checkIsPercolates();
+        // return checkIsPercolates();
+        return isPercolates;
     }
     // test client (optional)
     public static void main(String[] args) {
