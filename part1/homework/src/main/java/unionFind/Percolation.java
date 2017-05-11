@@ -129,18 +129,27 @@ public class Percolation {
         return false;
     }
 
-    /**
-     * check is Percolates on Open new site
-     * using find() fun
-     * @param row
-     * @param col
-     */
-    private void updateIsPercolatesAfterOpen(int row, int col) {
-        int index = getIndex(row, col);
-        int max = uf.find(index);
-        if (max <= num * (num - 1)) return;
-        isPercolates = isFull(max / num + 1, max % num);
+    private int getRowFromIndex(int index) {
+        return index / num
+            + (0 == index % num ? 0 : 1);
     }
+
+    private int getColFromIndex(int index) {
+        return 0 == index % num ? num : index % num;
+    }
+
+    // /**
+    //  * check is Percolates on Open new site
+    //  * using find_max() fun but not implement this
+    //  * @param row
+    //  * @param col
+    //  */
+    // private void updateIsPercolatesAfterOpen(int row, int col) {
+    //     int index = getIndex(row, col);
+    //     int max = uf.find_max(index);
+    //     if (max <= num * (num - 1)) return;
+    //     isPercolates = isFull(getRowFromIndex(max), getColFromIndex(max));
+    // }
 
     // open site (row, col) if it is not open already
     public void open(int row, int col) {
@@ -152,7 +161,7 @@ public class Percolation {
         // unionVirtualNode(row, col);
         // unionVirtualTopNode(row, col);
         isOpen[getIndex(row, col) - 1] = true;
-        updateIsPercolatesAfterOpen(row, col);
+        // updateIsPercolatesAfterOpen(row, col);
     }
 
 

@@ -42,7 +42,10 @@ tasks.withType(FindBugs) {
 }
 
 run {
-    if (project.hasProperty("appArgs")) {
-        args Eval.me(appArgs)
+//    if (project.hasProperty("appArgs")) {
+//        args Eval.me(appArgs)
+//    }
+    if(project.hasProperty('myargs')){
+        args(myargs.split(','))
     }
 }
