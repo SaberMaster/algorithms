@@ -27,6 +27,8 @@ public class Percolation {
         for (int i = 0; i < n * n; i++) {
             isOpen[i] = false;
         }
+
+        unionTopAndBottomVirtualNode();
     }
 
     private int getIndex(int row, int col) {
@@ -88,15 +90,26 @@ public class Percolation {
         }
     }
 
-    // private void unionVirtualBottomNode() {
-    //     for (int i = 1; i <= num; i++) {
-    //         int index = getIndex(num, i);
-    //         if (isOpen(num, i)) {
-    //             uf.union(index, virtualBottomNode);
-    //         }
-    //     }
-    // }
+    private void unionVirtualBottomNode() {
+        for (int i = 1; i <= num; i++) {
+            int index = getIndex(num, i);
+            if (isOpen(num, i)) {
+                uf.union(index, virtualBottomNode);
+            }
+        }
+    }
 
+    /**
+     * init virtual node at beginning may be the best method
+     * but if percolation all open bottom node is full
+     *
+     */
+    private void unionTopAndBottomVirtualNode() {
+        for (int i = 1; i <= num; i++) {
+            uf.union(getIndex(1, i), virtualTopNode);
+            uf.union(getIndex(num, i), virtualBottomNode);
+        }
+    }
 
     /**
      * checkPercolaates on call percolates func
@@ -137,7 +150,7 @@ public class Percolation {
         unionAround(row, col);
         // union virtual node
         // unionVirtualNode(row, col);
-        unionVirtualTopNode(row, col);
+        // unionVirtualTopNode(row, col);
         isOpen[getIndex(row, col) - 1] = true;
         updateIsPercolatesAfterOpen(row, col);
     }
@@ -162,9 +175,9 @@ public class Percolation {
     }
     // does the system percolate?
     public boolean percolates() {
-        // return uf.connected(virtualTopNode, virtualBottomNode);
+        return uf.connected(virtualTopNode, virtualBottomNode);
         // return checkIsPercolates();
-        return isPercolates;
+        // return isPercolates;
     }
     // test client (optional)
     public static void main(String[] args) {
