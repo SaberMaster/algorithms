@@ -9,6 +9,7 @@ public class Percolation {
     private int virtualBottomNode;
     private int openSiteNum;
     private boolean isPercolates;
+    private boolean isUnionAllVirtualMode;
 
     // create n-by-n grid, with all sites blocked
     public Percolation(int n) {
@@ -27,8 +28,8 @@ public class Percolation {
         for (int i = 0; i < n * n; i++) {
             isOpen[i] = false;
         }
-
-        unionTopAndBottomVirtualNode();
+        isUnionAllVirtualMode = false;
+        unionTopAndBottomVirtualNode(isUnionAllVirtualMode);
     }
 
     private int getIndex(int row, int col) {
@@ -104,10 +105,12 @@ public class Percolation {
      * but if percolation all open bottom node is full
      *
      */
-    private void unionTopAndBottomVirtualNode() {
+    private void unionTopAndBottomVirtualNode(boolean isAll) {
         for (int i = 1; i <= num; i++) {
             uf.union(getIndex(1, i), virtualTopNode);
-            uf.union(getIndex(num, i), virtualBottomNode);
+            if (isAll) {
+                uf.union(getIndex(num, i), virtualBottomNode);
+            }
         }
     }
 
@@ -130,12 +133,21 @@ public class Percolation {
     }
 
     private int getRowFromIndex(int index) {
-        return index / num
-            + (0 == index % num ? 0 : 1);
+        if (0 == index % num) {
+            return index / num;
+        }
+        else {
+            return index / num + 1;
+        }
     }
 
     private int getColFromIndex(int index) {
-        return 0 == index % num ? num : index % num;
+        if (0 == index % num) {
+            return num;
+        }
+        else {
+            return index % num;
+        }
     }
 
     // /**
@@ -184,8 +196,12 @@ public class Percolation {
     }
     // does the system percolate?
     public boolean percolates() {
-        return uf.connected(virtualTopNode, virtualBottomNode);
-        // return checkIsPercolates();
+        if (isUnionAllVirtualMode) {
+            return uf.connected(virtualTopNode, virtualBottomNode);
+        }
+        else {
+            return checkIsPercolates();
+        }
         // return isPercolates;
     }
     // test client (optional)
