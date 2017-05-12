@@ -3,3 +3,5 @@
 build/
 gradlew*
 .DS_Store
+gradle/
+input/
