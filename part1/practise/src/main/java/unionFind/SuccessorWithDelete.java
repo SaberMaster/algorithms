@@ -12,11 +12,7 @@
  *
  */
 
-package unionFind;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+package unionfind;
 
 
 
@@ -28,17 +24,17 @@ class SuccessorWithDelete {
     private boolean[] isRemove;
     private int num;
 
-    public SuccessorWithDelete(int N) {
-        initData(N);
+    public SuccessorWithDelete(int n) {
+        initData(n);
     }
 
-    private void initData(int N) {
-        id = new int[N];
-        weight = new int[N];
-        max = new int[N];
-        isRemove = new boolean[N];
-        num = N;
-        for (int i = 0; i < N; i++) {
+    private void initData(int n) {
+        id = new int[n];
+        weight = new int[n];
+        max = new int[n];
+        isRemove = new boolean[n];
+        num = n;
+        for (int i = 0; i < n; i++) {
             id[i] = i;
             max[i] = i;
             weight[i] = 1;
@@ -64,17 +60,18 @@ class SuccessorWithDelete {
     }
 
     public boolean union(int x, int y) {
-        int root_x = root(x);
-        int root_y = root(y);
-        if (root_x == root_y) return false;
-        if (weight[root_x] < weight[root_y]) {
-            id[root_x] = root_y;
-            weight[root_y] += weight[root_x];
-            max[root_y] = max[root_y] > max[root_x] ? max[root_y] : max[root_x];
-        } else {
-            id[root_y] = root_x;
-            weight[root_x] += weight[root_y];
-            max[root_x] = max[root_y] > max[root_x] ? max[root_y] : max[root_x];
+        int rootX = root(x);
+        int rootY = root(y);
+        if (rootX == rootY) return false;
+        if (weight[rootX] < weight[rootY]) {
+            id[rootX] = rootY;
+            weight[rootY] += weight[rootX];
+            max[rootY] = max[rootY] > max[rootX] ? max[rootY] : max[rootX];
+        }
+        else {
+            id[rootY] = rootX;
+            weight[rootX] += weight[rootY];
+            max[rootX] = max[rootY] > max[rootX] ? max[rootY] : max[rootX];
         }
         return true;
     }
@@ -82,12 +79,12 @@ class SuccessorWithDelete {
     public int remove(int x) {
         if (!isRemove[x]) {
             isRemove[x] = true;
-                if (x >= 1 &&
-                isRemove[x - 1]) {
+            if (x >= 1
+                && isRemove[x - 1]) {
                 union(x, x - 1);
             }
-            if (x < num - 1 &&
-                isRemove[x + 1]) {
+            if (x < num - 1
+                && isRemove[x + 1]) {
                 union(x, x + 1);
             }
         }
@@ -95,22 +92,22 @@ class SuccessorWithDelete {
     }
 
     public static void main(String[] args) {
-        int peopleCount = 10;
-        SuccessorWithDelete uf = new SuccessorWithDelete(peopleCount);
+        // int peopleCount = 10;
+        // SuccessorWithDelete uf = new SuccessorWithDelete(peopleCount);
 
-        try {
-            File file = new File("SuccessorWithDeleteInput.txt");
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String s = null;
-            while(null != (s = br.readLine())) {
-                int result = uf.remove(Integer.parseInt(s));
-                System.out.println(result);
-            }
-        }
-        catch (Throwable e) {
-            System.out.println("Error " + e.getMessage());
-            e.printStackTrace();
-        }
+        // try {
+        //     File file = new File("SuccessorWithDeleteInput.txt");
+        //     BufferedReader br = new BufferedReader(new FileReader(file));
+        //     String s = null;
+        //     while (null != (s = br.readLine())) {
+        //         int result = uf.remove(Integer.parseInt(s));
+        //         System.out.println(result);
+        //     }
+        // }
+        // catch (Throwable e) {
+        //     System.out.println("Error " + e.getMessage());
+        //     e.printStackTrace();
+        // }
 
     }
 }

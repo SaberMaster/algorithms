@@ -7,20 +7,20 @@
  *
  *
  */
-package unionFind;
+package unionfind;
 
 class WeightQuickUnionWithPathCompression {
     private int[] id;
     private int[] weight;
 
-    public WeightQuickUnionWithPathCompression(int N) {
-        initData(N);
+    public WeightQuickUnionWithPathCompression(int n) {
+        initData(n);
     }
 
-    private void initData(int N) {
-        id = new int[N];
-        weight = new int[N];
-        for (int i = 0; i < N; i++) {
+    private void initData(int n) {
+        id = new int[n];
+        weight = new int[n];
+        for (int i = 0; i < n; i++) {
             id[i] = i;
             weight[i] = 1;
         }
@@ -40,15 +40,16 @@ class WeightQuickUnionWithPathCompression {
     }
 
     public boolean union(int x, int y) {
-        int root_x = root(x);
-        int root_y = root(y);
-        if (root_x == root_y) return false;
-        if (weight[root_x] < weight[root_y]) {
-            id[root_x] = root_y;
-            weight[root_y] += weight[root_x];
-        } else {
-            id[root_y] = root_x;
-            weight[root_x] += weight[root_y];
+        int rootX = root(x);
+        int rootY = root(y);
+        if (rootX == rootY) return false;
+        if (weight[rootX] < weight[rootY]) {
+            id[rootX] = rootY;
+            weight[rootY] += weight[rootX];
+        }
+        else {
+            id[rootY] = rootX;
+            weight[rootX] += weight[rootY];
         }
         return true;
     }

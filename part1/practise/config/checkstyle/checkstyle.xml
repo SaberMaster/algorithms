@@ -48,15 +48,15 @@
          5.  *  [optional lines]
          6.  ******************************************************************************/
     -->
-    <module name="RegexpMultiline">
-        <property name="format"
-                 value="\A\/\*{78}\n \*  Compilation:.*\n( \*.*\n)* \*  Execution:.*\n( \*.*\n)* \*{78}/\n"/>
-        <property name="fileExtensions" value="java"/>
-        <property name="minimum" value="1"/>
-        <property name="maximum" value="1"/>
-        <property name="message" value="Incorrect algs4.jar header format."/>
-        <property name="ignoreCase" value="false"/>
-    </module>
+    <!-- <module name="RegexpMultiline"> -->
+    <!--     <property name="format" -->
+    <!--              value="\A\/\*{78}\n \*  Compilation:.*\n( \*.*\n)* \*  Execution:.*\n( \*.*\n)* \*{78}/\n"/> -->
+    <!--     <property name="fileExtensions" value="java"/> -->
+    <!--     <property name="minimum" value="1"/> -->
+    <!--     <property name="maximum" value="1"/> -->
+    <!--     <property name="message" value="Incorrect algs4.jar header format."/> -->
+    <!--     <property name="ignoreCase" value="false"/> -->
+    <!-- </module> -->
 
     <module name="RegexpSingleline">
         <!-- <property name="fileExtensions" value ="java, txt, toy"/> -->
@@ -633,10 +633,10 @@
         <!-- =========================================================================== -->
 
         <!-- Check that length of line is at most 140 characters. -->
-        <module name="LineLength">
-            <property name="max" value="140"/>
-            <message key="maxLineLen" value="Line is longer than {0,number,integer} characters (currently {1,number,integer})."/>
-        </module>
+        <!-- <module name="LineLength"> -->
+        <!--     <property name="max" value="140"/> -->
+        <!--     <message key="maxLineLen" value="Line is longer than {0,number,integer} characters (currently {1,number,integer})."/> -->
+        <!-- </module> -->
 
         <module name="MethodLength">
             <property name="max" value="150"/>
@@ -754,13 +754,13 @@
         </module>
 
         <!-- Avoid masking of OutOfMemoryError or NullPointerExceptionError -->
-        <module name="IllegalCatch">
-            <message key="illegal.catch" value="Do not catch ''{0}'' in this course."/>
-        </module>
+        <!-- <module name="IllegalCatch"> -->
+        <!--     <message key="illegal.catch" value="Do not catch ''{0}'' in this course."/> -->
+        <!-- </module> -->
 
-        <module name="IllegalThrows">
-            <message key="illegal.throw" value="Do not throw ''{0}'' in this course."/>
-        </module>
+        <!-- <module name="IllegalThrows"> -->
+        <!--     <message key="illegal.throw" value="Do not throw ''{0}'' in this course."/> -->
+        <!-- </module> -->
 
         <module name="IllegalType">
             <property name="illegalClassNames" value="java.lang.Class, Class"/>
@@ -790,9 +790,9 @@
             <message key="illegal.token" value="Do not define enums in this course."/>
         </module>
 
-        <module name="AvoidInlineConditionals">
-            <message key="inline.conditional.avoid" value="Do not use the ternary conditional operator in this course."/>
-        </module>
+        <!-- <module name="AvoidInlineConditionals"> -->
+        <!--     <message key="inline.conditional.avoid" value="Do not use the ternary conditional operator in this course."/> -->
+        <!-- </module> -->
 
         <module name="IllegalToken">
             <property name="tokens" value="LABELED_STAT"/>
