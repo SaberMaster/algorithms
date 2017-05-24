@@ -16,7 +16,8 @@
  *
  */
 
-public class EggDrop{
+
+public class EggDrop {
     private static boolean test(int i, int t) {
         return i < t;
     }
@@ -50,15 +51,14 @@ public class EggDrop{
         int i = 1;
         while (i < n) {
             if (!test(i, t)) break;
-            i <<<= 1;
+            i = i << 1;
         }
         return drop1(Math.min(i, n) - i >>> 1, t - i >>> 1)
             + i >>> 1;
     }
 
-
     public static int drop3(int n, int t) {
-        int tosses = Math.floor((float) Math.sqrt(n));
+        int tosses = (int) Math.floor(Math.sqrt((double) n));
         int times = 0;
         int sum = tosses;
         for (times = 0; times < tosses; times++) {
@@ -73,7 +73,7 @@ public class EggDrop{
 
     public static int drop4(int n, int t) {
         int tosses = 1;
-        while(true) {
+        while (true) {
             if (tosses * (tosses + 1) >= 2 * n) break;
             tosses++;
         }

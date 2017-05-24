@@ -1,0 +1,9 @@
+Java generics. Explain why Java prohibits generic array creation.
+
+i think because the basic date type such as int, double
+don't want to transfer it to Integer, Double Object
+
+
+Hint: to start, you need to understand that Java arrays are covariant but Java generics are not: that is, 𝚂𝚝𝚛𝚒𝚗𝚐[] is a subtype of 𝙾𝚋𝚓𝚎𝚌𝚝[], but 𝚂𝚝𝚊𝚌𝚔<𝚂𝚝𝚛𝚒𝚗𝚐> is not a subtype of 𝚂𝚝𝚊𝚌𝚔<𝙾𝚋𝚓𝚎𝚌𝚝>.
+
+http://blog.csdn.net/aabbwoshishei/article/details/50163261
