@@ -285,10 +285,10 @@
             <message key="illegal.type" value="Use the primitive type ''double'' instead of the wrapper type ''Double''."/>
         </module>
 
-        <module name="IllegalType">
-            <property name="illegalClassNames" value="java.lang.Integer, Integer"/>
-            <message key="illegal.type" value="Use the primitive type ''int'' instead of the wrapper type ''Integer''."/>
-        </module>
+        <!-- <module name="IllegalType"> -->
+        <!--     <property name="illegalClassNames" value="java.lang.Integer, Integer"/> -->
+        <!--     <message key="illegal.type" value="Use the primitive type ''int'' instead of the wrapper type ''Integer''."/> -->
+        <!-- </module> -->
 
         <module name="DeclarationOrder">
             <message key="declaration.order.constructor" value="Define constructors after static and instance variables but before methods."/>
