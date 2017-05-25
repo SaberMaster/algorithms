@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Iterator;
 
 /**
@@ -20,12 +21,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public RandomizedQueue() {
         values = (Item[]) new Object[1];
         isDels = new boolean[1];
+        isDels[0] = true;
         n = 0;
         current = 0;
     }
     // is the queue empty?
     public boolean isEmpty() {
-        return n > 0;
+        return n <= 0;
     }
     // return the number of items on the queue
     public int size() {
@@ -124,6 +126,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     // unit testing (optional)
     public static void main(String[] args) {
-
+        // RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();;
+        // Iterator<Integer> it = rq.iterator();
     }
 }
