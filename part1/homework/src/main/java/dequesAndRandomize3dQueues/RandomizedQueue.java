@@ -65,14 +65,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item dequeue() {
         if (0 >= size()) throw new java.util.NoSuchElementException();
         if (n * 4 <= values.length) {
-            resize(values.length);
+            resize(values.length / 2);
         }
         while (true) {
             int rand = StdRandom.uniform(values.length);
             if (!isDels[rand]) {
                 isDels[rand] = true;
+                Item value = values[rand];
+                values[rand] = null;
                 n--;
-                return values[rand];
+                return value;
             }
         }
     }

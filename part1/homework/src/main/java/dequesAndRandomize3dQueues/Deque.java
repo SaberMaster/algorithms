@@ -64,20 +64,22 @@ public class Deque<Item> implements Iterable<Item> {
     // remove and return the item from the front
     public Item removeFirst() {
         if (size() <= 0) throw new java.util.NoSuchElementException();
-        DoubleEndedQueue<Item> oldFirst = first;
+        Item value = first.value;
         first = first.next;
-        if (null != first) first.previous = null;
+        if (1 < n) first.previous = null;
+        else last = first;
         n--;
-        return oldFirst.value;
+        return value;
     }
     // remove and return the item from the end
     public Item removeLast() {
         if (size() <= 0) throw new java.util.NoSuchElementException();
-        DoubleEndedQueue<Item> oldLast = last;
+        Item value = last.value;
         last = last.previous;
-        if (null != last) last.next = null;
+        if (1 < n) last.next = null;
+        else first = last;
         n--;
-        return oldLast.value;
+        return value;
     }
     // return an iterator over items in order from front to end
     public Iterator<Item> iterator() {
@@ -102,6 +104,8 @@ public class Deque<Item> implements Iterable<Item> {
     // unit testing (optional)
     public static void main(String[] args) {
         Deque<Integer> de = new Deque<Integer>();
+        de.addFirst(1);
+        StdOut.println(de.removeLast());
         // de.addFirst(1);
         // de.addLast(2);;
         // de.addLast(2);
