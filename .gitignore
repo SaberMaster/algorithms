@@ -5,3 +5,4 @@ gradlew*
 .DS_Store
 gradle/
 input/
+*.zip
