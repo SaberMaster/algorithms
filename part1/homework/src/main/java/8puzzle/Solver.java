@@ -19,17 +19,15 @@ public class Solver {
     private class BoardStruct implements Comparable<BoardStruct> {
         private final Board board;
         private int moves;
-        private int manha;
         private BoardStruct previous;
         public BoardStruct(int moves, Board board, BoardStruct previous) {
             this.moves = moves;
             this.board = board;
-            this.manha = this.board.manhattan();
             this.previous = previous;
         }
 
         private int getPriority() {
-            return this.moves + this.manha;
+            return this.moves + this.board.manhattan();
         }
 
         public int compareTo(BoardStruct that) {

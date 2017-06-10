@@ -1,7 +1,4 @@
 import edu.princeton.cs.algs4.Stack;
-// import edu.princeton.cs.algs4.StdOut;
-// import edu.princeton.cs.algs4.StdOut;
-
 /**
  * @file   Board.java
  * @author Lyn <lyn1990828@gmail.com>
@@ -15,6 +12,8 @@ import edu.princeton.cs.algs4.Stack;
 public class Board {
     private int[][] blocks;
     private int dimen;
+    private int manha;
+    private int hamm;
 
     // construct a board from an n-by-n array of blocks
     // (where blocks[i][j] = block in row i, column j)
@@ -26,6 +25,8 @@ public class Board {
             }
         }
         this.dimen = blocks.length;
+        this.manha = -1;
+        this.hamm = -1;
     }
     // board dimension n
     public int dimension() {
@@ -33,6 +34,7 @@ public class Board {
     }
     // number of blocks out of place
     public int hamming() {
+        if (-1 != this.hamm) return this.hamm;
         int sum = 0;
         int index;
         for (int i = 0; i < this.dimen; i++) {
@@ -42,10 +44,12 @@ public class Board {
                 if (index + 1 != this.blocks[i][j]) sum++;
             }
         }
+        this.hamm = sum;
         return sum;
     }
     // sum of Manhattan distances between blocks and goal
     public int manhattan() {
+        if (-1 != this.manha) return this.manha;
         int sum = 0;
         int index;
         for (int i = 0; i < this.dimen; i++) {
@@ -59,6 +63,7 @@ public class Board {
                 }
             }
         }
+        this.manha = sum;
         return sum;
     }
     // is this board the goal board?
@@ -108,23 +113,8 @@ public class Board {
     }
     // does this board equal y?
     public boolean equals(Object y) {
-        // int[][] blocksCopy = ((Board) y).getBlocks();
-        // for (int i = 0; i < this.dimen; i++) {
-        //     for (int j = 0; j < this.dimen; j++) {
-        //         if (blocksCopy[i][j] != this.blocks[i][j]) return false;
-        //     }
-        // }
-        // return true;
         if (null == y) return false;
         if (y == this) return true;
-
-        // ((Board) y).getBlocks();
-        // if (Board.class != y.getClass()
-        //     || this.dimension() != ((Board) y).dimension()
-        //     || this.hamming() != ((Board) y).hamming()
-        //     || this.manhattan() != ((Board) y).manhattan()) return false;
-        // return true;
-
         if (this.getClass() != y.getClass()) return false;
         int[][] blocksCopy = ((Board) y).getBlocks();
         for (int i = 0; i < this.dimen; i++) {
@@ -175,8 +165,6 @@ public class Board {
         int[][] newBlocks = this.getBlocks();
         swap(newBlocks, blankIndex, toIndex);
         boardArr.push(new Board(newBlocks));
-        // StdOut.println(new Board(newBlocks));
-        // StdOut.println("******");
     }
 
 
