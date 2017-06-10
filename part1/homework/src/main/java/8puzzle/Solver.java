@@ -17,58 +17,23 @@ import edu.princeton.cs.algs4.Stack;
 public class Solver {
 
     private class BoardStruct implements Comparable<BoardStruct> {
-        private Board board;
+        private final Board board;
         private int moves;
         private int manha;
-        private Board previous;
-        public BoardStruct(int moves, Board board, Board previous) {
+        private BoardStruct previous;
+        public BoardStruct(int moves, Board board, BoardStruct previous) {
             this.moves = moves;
             this.board = board;
             this.manha = this.board.manhattan();
             this.previous = previous;
         }
 
-        public Board getPrevious() {
-            return this.previous;
-        }
-
-        public void setPrevious(Board pre) {
-            this.previous = pre;
-        }
-
-        public int getPriority() {
+        private int getPriority() {
             return this.moves + this.manha;
         }
 
-        public Board getBoard() {
-            return this.board;
-        }
-
-        public void setBoard(Board curr) {
-            this.board = curr;
-            this.manha = this.board.manhattan();
-        }
-
-        public int getMoves() {
-            return this.moves;
-        }
-
-        public void setMoves(int moves) {
-            this.moves = moves;
-        }
-
         public int compareTo(BoardStruct that) {
-            if (this.getPriority() == that.getPriority()) {
-                if (this.manha == that.manha) {
-                    return 0;
-                }
-                else if (this.manha > that.manha) {
-                    return 1;
-                }
-                else {
-                    return -1;
-                }
-            }
+            if (this.getPriority() == that.getPriority()) return 0;
             else if (this.getPriority() > that.getPriority()) return 1;
             else return -1;
         }
@@ -86,119 +51,50 @@ public class Solver {
         this.isSolve = false;
         this.boardList = new Stack<Board>();
         // first circle
-        aStar(initial, this.boardList);
-        if (this.isSolve) {
-            Stack<Board> tmpSB = new Stack<Board>();
-            for (Board b : this.boardList) {
-                tmpSB.push(b);
+        BoardStruct bs = aStar(initial);
+        if (null != bs) {
+            this.isSolve = true;
+            this.moves = bs.moves;
+            while (null != bs) {
+                this.boardList.push(bs.board);
+                bs = bs.previous;
             }
-            this.boardList = tmpSB;
         }
     }
 
-    private void aStar(Board init, Stack<Board> boardListTmp) {
+    private BoardStruct aStar(Board init) {
         MinPQ<BoardStruct> pq = new MinPQ<BoardStruct>();
-        boardListTmp.push(init);
-
-
-        // SimpleStruct oneSS = new SimpleStruct();
-        // oneSS.current = init;
         BoardStruct bs = new BoardStruct(0, init, null);
+        pq.insert(bs);
+
+        Board another = init.twin();
+        MinPQ<BoardStruct> pqAnother = new MinPQ<BoardStruct>();
+        BoardStruct bsAnother = new BoardStruct(0, another, null);
+        pqAnother.insert(bsAnother);
 
 
-        // Board another = init.twin();
-        // Stack<Board> boardListAnother = new Stack<Board>();
-        // MinPQ<BoardStruct> pqAnother = new MinPQ<BoardStruct>();
-        // boardListAnother.push(another);
-
-        // SimpleStruct anotherSS = new SimpleStruct();
-        // anotherSS.current = another;
-
-        boolean notFinishA = true, notFinishB = true;
-        if (init.isGoal()) return;
+        if (init.isGoal()) return bs;
+        if (another.isGoal()) return null;
         while (true) {
-            if (notFinishA) {
-                notFinishA = circle(bs, boardListTmp, pq);
-                if (bs.getBoard().isGoal()) {
-                    this.isSolve = true;
-                    this.moves = bs.getMoves();
-                    break;
-                }
-                StdOut.println(init.manhattan());
-                // if (bs.getMoves() > init.manhattan()) {
-                //     break;
-                // }
-            }
-            else break;
-            // if (notFinishB) {
-            //     notFinishB = circle(anotherSS, boardListAnother, pqAnother);
-            //     if (anotherSS.min.getBoard().isGoal()) {
-            //         this.isSolve = false;
-            //         break;
-            //     }
-            // }
+            bs = circle(pq);
+            if (bs.board.isGoal()) return bs;
+            bsAnother = circle(pqAnother);
+            if (bsAnother.board.isGoal()) return null;
         }
     }
 
-    private boolean circle(BoardStruct bs, Stack<Board> boardListOne, MinPQ<BoardStruct> pq) {
-
-        int currentMoves;
-        int diff;
-        boolean isEqualed = false;
-        currentMoves = bs.getMoves() + 1;
-
-        for (Board b : bs.getBoard().neighbors()) {
+    private BoardStruct circle(MinPQ<BoardStruct> pq) {
+        BoardStruct bs = pq.delMin();
+        for (Board b : bs.board.neighbors()) {
             // cmp pre
-            if (!isEqualed
-                && b.equals(bs.getPrevious())) {
-                isEqualed = true;
+            if (null != bs.previous
+                && b.equals(bs.previous.board)) {
                 continue;
             }
-            // if (null == ss.min
-            //     || b.manhattan() == ss.current.manhattan() - 1) {
-            //     BoardStruct bs = new BoardStruct(currentMoves, b, ss.current);
-            //     pq.insert(bs);
-            // }
-            BoardStruct bsNew = new BoardStruct(currentMoves, b, bs.getBoard());
+            BoardStruct bsNew = new BoardStruct(bs.moves + 1, b, bs);
             pq.insert(bsNew);
         }
-
-        // StdOut.println("*****");
-        // for (BoardStruct bb : pq) {;
-        //     StdOut.print(bb.getBoard());
-        //     StdOut.println(bb.getBoard().manhattan());
-        // // }
-        if (pq.size() <= 0) return false;
-        BoardStruct min = pq.delMin();
-        while (min.getMoves() > currentMoves) {
-            // StdOut.println("====");
-            // StdOut.println(ss.min.getBoard());
-            min = pq.delMin();
-        }
-
-        // StdOut.println("*****");
-        // StdOut.println(min.getBoard());
-        // StdOut.println(min.getBoard().manhattan());
-
-        diff = currentMoves - min.getMoves();
-        // StdOut.println("====");
-        // StdOut.println(boardListOne);
-        // StdOut.println(currentMoves);
-        // StdOut.println(ss.min.getMoves());
-        // StdOut.println(currentMoves - ss.min.getMoves());
-        // StdOut.println(diff);
-        while (diff-- > 0) {
-            boardListOne.pop();
-        }
-
-        bs.setPrevious(min.getPrevious());
-        bs.setBoard(min.getBoard());
-        bs.setMoves(min.getMoves());
-        boardListOne.push(bs.getBoard());
-
-        // StdOut.println("====");
-        // StdOut.println(bs.getBoard());
-        return true;
+        return bs;
     }
 
     // is the initial board solvable?
@@ -207,11 +103,13 @@ public class Solver {
     }
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        return this.moves;
+        if (isSolvable()) return this.moves;
+        else return -1;
     }
     // sequence of boards in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
-        return this.boardList;
+        if (isSolvable()) return this.boardList;
+        else return null;
     }
     // solve a slider puzzle (given below)
     public static void main(String[] args) {
