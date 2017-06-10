@@ -117,6 +117,7 @@ public class Board {
         if (y == this) return true;
         if (this.getClass() != y.getClass()) return false;
         int[][] blocksCopy = ((Board) y).getBlocks();
+        if (blocksCopy.length != this.dimen) return false;
         for (int i = 0; i < this.dimen; i++) {
             for (int j = 0; j < this.dimen; j++) {
                 if (blocksCopy[i][j] != this.blocks[i][j]) return false;
